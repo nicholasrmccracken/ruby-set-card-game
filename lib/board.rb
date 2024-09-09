@@ -1,0 +1,1 @@
+# Represents the playing area where cards are dealt.

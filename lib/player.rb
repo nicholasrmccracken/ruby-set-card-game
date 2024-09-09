@@ -1,0 +1,1 @@
+# Represents the player, defines attributes of a player, and player actions.

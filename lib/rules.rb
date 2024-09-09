@@ -1,0 +1,1 @@
+# Defines the rules of the game, stores came constants, defines conditions.

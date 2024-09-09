@@ -1,0 +1,1 @@
+# Represents a card in a deck of cards. Defines the attributes of a card.
