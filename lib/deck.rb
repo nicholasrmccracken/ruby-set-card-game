@@ -26,7 +26,7 @@ module Game
     # Shuffles the deck in-place.
     #
     # @return [Array<Card>] The shuffled deck.
-    def shuffle_deck!
+    def shuffle!
       @deck.shuffle!
     end
 
@@ -34,9 +34,9 @@ module Game
     #
     # @param n [Integer] The number of cards to deal. Defaults to 1.
     # @return [Array<Card>] The dealt cards.
-    def deal_cards(n = 1)
+    def deal_cards(num_cards = 1)
       cards = []
-      n.times do
+      num_cards.times do
         cards.push(@deck.pop)
       end
       cards
