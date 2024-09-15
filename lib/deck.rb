@@ -41,5 +41,23 @@ module Game
       end
       cards
     end
+
+    # Replace a found set with 3 new cards
+    #
+    # @param set [Array<Card>] The cards in the found set.
+    # @param cards [Array<Card>] The current cards visible to player.
+    # @return [Array<Card>] New updated array of cards.
+    def replace_set(set, cards)
+      set.each { |card| cards.delete(card) }
+      cards.concat(deal_cards(3))
+    end
+
+    # Add 3 new cards to those visible to player.
+    #
+    # @param cards [Array<Card>] The current cards visible to player.
+    # @return [Array<Card>] New updated array of cards.
+    def add_more_cards(cards)
+      cards.concat(deal_cards(3))
+    end
   end
 end
