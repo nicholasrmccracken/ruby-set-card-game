@@ -1,0 +1,7 @@
+1. single player
+2. two players
+3. read rules
+4. view programmer notes
+0. quit :(
+
+Where would you like to go: 
