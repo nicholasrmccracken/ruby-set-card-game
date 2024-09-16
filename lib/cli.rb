@@ -25,17 +25,14 @@ class CLI
       # exit condition
       when 0
         puts "Its been fun seeing you !!\n"
-      # single player mode
+      # play mode
       when 1
-        single_player
-      # 2 player mode
-      when 2
-        two_player
+        play
       # rules mode
-      when 3
+      when 2
         rules
       # programmer notes
-      when 4
+      when 3
         puts 'notes to come'
       # invalid input condition
       else
@@ -43,6 +40,24 @@ class CLI
       end
 
     end
+  end
+
+  def play
+    puts 'Enter # of players: '
+    n_players = gets.to_i
+    if n_players < 1
+      puts 'At least one player required.'
+      return
+    end
+
+    players = []
+    n_players.times { |i| players << Game::Player.new("Player #{i + 1}") }
+
+    board = Game::Board.new(Game::Deck.new(Game::Card))
+
+    game = SetGame.new(board, players)
+    puts 'Starting game...'
+    game.play_game
   end
 
   # Defines the rules of the game
