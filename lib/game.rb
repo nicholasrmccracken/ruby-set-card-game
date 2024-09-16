@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+require_relative 'constants'
 require_relative 'card'
 require_relative 'deck'
 require_relative 'board'
+require_relative 'player'
 
 module Game
   # Represents a game playthrough of set.
@@ -10,41 +12,65 @@ module Game
     # Initialize a new SetGame.
     #
     # @param board [Board] the game board.
-    # @param difficulty [Integer] the game difficulty.
-    def initialize(board, difficulty)
+    # @param players [Array<Player>] the players in the game.
+    # @param difficulty [String] the game difficulty. Must be 'easy', 'medium', or 'hard'. Defaults to 'medium'.
+    # @param winning_score [Integer] the score required to win the game. Must be <= 27 / number of players. Defaults to 5.
+    # @raise [ArgumentError] if difficulty is not valid or if winning_score exceeds the allowed max.
+    def initialize(board, players, difficulty = 'medium', winning_score = 5)
       @board = board
+      @players = players
+
+      valid_difficulties = %w[easy medium hard]
+      unless valid_difficulties.include?(difficulty)
+        raise ArgumentError, "Invalid difficulty '#{difficulty}'. Must be 'easy', 'medium', or 'hard'."
+      end
       @difficulty = difficulty
+
+      max_score = 27 / players.size
+      unless (1..max_score).include?(winning_score)
+        raise ArgumentError, "Invalid winning score #{winning_score}. Must be between 1 and #{max_score}."
+      end
+      @winning_score = winning_score
     end
 
-    # Play the game until the board is empty.
+    # Play the game until the board is empty or a player wins.
     def play_game
-      play_round until @board.board.empty?
+      until @board.board.empty?
+        @players.each do |player|
+          play_round(player)
+
+          if player.score >= @winning_score
+            puts "#{player.name} has won with a score of #{player.score}!"
+            return
+          end
+        end
+      end
     end
 
     private
 
-    # Play a round of the game. This includes printing the board,
-    # getting the player's choice, and processing the player's choice.
-    def play_round
-      @board.print_board
-      puts
-
+    # Play a round of the game.
+    #
+    # @param player [Player] the player whose turn it is.
+    def play_round(player)
       loop do
-        choice = player_choice
-
-        case choice
-        when 'a'
-          @board.add_cards
-        when 'i'
-          break if process_set_identification
-        when 'h'
-          process_hint
-        else
-          puts 'Invalid move. Please try again.'
-        end
+        print_scoreboard
         @board.print_board
         puts
+
+        print "#{player.name}'s turn:\n"
+        break if process_choice(player_choice, player)
       end
+    end
+
+    # Print the scoreboard showing each player's score.
+    def print_scoreboard
+      puts " ------ Scoreboard ------ "
+      @players.each_with_index do |player, i|
+        print "#{player.name}: #{player.score}"
+        print ", " if i < @players.length - 1
+      end
+      print "\n\n"
     end
 
     # Get the player's choice for the current round.
@@ -55,42 +81,73 @@ module Game
       puts '(i) Identify set'
       puts '(h) See hint'
       print 'Enter choice: '
-      gets.chomp
+      choice = gets.chomp
+      puts
+      choice
     end
 
-    # Process the player's choice to identify a set.
+    # Process the player's choice and execute the appropriate action.
     #
-    # @return [Boolean] true if a set was identified, false otherwise
-    def process_set_identification
-      trio = get_trio
-      if @board.board[trio[0]].set?(@board.board[trio[1]], @board.board[trio[2]])
-        puts 'Set found!'
-        @board.remove_cards(trio)
-        @board.add_cards unless @board.board.length >= START_SIZE
-        return true
+    # @param choice [String] the player's choice.
+    # @param player [Player] the current player.
+    # @return [Boolean] true if a valid choice was made, false otherwise.
+    def process_choice(choice, player)
+      case choice
+      when 'a'
+        @board.add_cards
+      when 'i'
+        process_set_identification(player)
+      when 'h'
+        process_hint
+      else
+        print "Invalid move. Please try again.\n\n"
+        return false
       end
-
-      puts 'Not a valid set.'
-      false
+      true
     end
 
-    # Process the player's request for a hint.
+    # Process the player's attempt to identify a set.
+    #
+    # @param player [Player] the current player.
+    # @return [Boolean] true if the player correctly identified a set, false otherwise.
+    def process_set_identification(player)
+      trio = parse_trio
+      if @board.board[trio[0]].set?(@board.board[trio[1]], @board.board[trio[2]])
+        process_valid_set(player, trio)
+      else
+        print "Not a valid set.\n\n"
+      end
+    end
+
+    # Process a valid set identified by the player.
+    #
+    # @param player [Player] the current player.
+    # @param trio [Array<Integer>] the indices of the cards that form a set.
+    # @return [Boolean] always returns true
+    def process_valid_set(player, trio)
+      puts 'Set found!'
+      player.increment_score
+      @board.remove_cards(trio)
+      @board.add_cards unless @board.board.length >= START_SIZE
+    end
+
+    # Process the player's request for a hint. The hint provided depends on the game difficulty.
     def process_hint
       case @difficulty
       when 'easy'
         @board.find_single_set
-        puts "Cards #{@board.find_single_set} make a set."
+        print "Cards #{@board.find_single_set} make a set.\n\n"
       when 'medium'
-        puts "There are #{@board.find_set_count} sets on the board."
+        print "There are #{@board.find_set_count} sets on the board.\n\n"
       when 'hard'
-        puts 'No hints allowed.'
+        print "No hints allowed.\n\n"
       end
     end
 
-    # Get a trio of cards from the user
+    # Get a trio of card indices from the user.
     #
-    # @return [Array<Integer>] the trio of cards
-    def get_trio
+    # @return [Array<Integer>] the indices of the trio of cards chosen by the player.
+    def parse_trio
       iteration = %w[first second third]
       trio = []
 
@@ -101,22 +158,31 @@ module Game
         print "Enter #{iteration[trio.length]} column: "
         column = gets.chomp.to_i
 
-        coordinate = row * 3 + column
-        if !trio.include?(coordinate) && valid_coordinates?(row, column)
-          trio.push(row * 3 + column)
-        else
-          puts 'Invalid row or column. Please try again.'
-        end
-        puts
+        validate_trio(row, column, trio)
       end
       trio
     end
 
-    # Check if the given coordinates are valid
+    # Validate the row and column entered by the player.
     #
-    # @param row [Integer] the row coordinate
-    # @param column [Integer] the column coordinate
-    # @return [Boolean] true if the coordinates are valid, false otherwise
+    # @param row [Integer] the row entered by the player.
+    # @param column [Integer] the column entered by the player.
+    # @param trio [Array<Integer>] the current trio of card indices.
+    def validate_trio(row, column, trio)
+      coordinate = row * 3 + column
+      if !trio.include?(coordinate) && valid_coordinates?(row, column)
+        trio.push(coordinate)
+      else
+        puts 'Invalid row or column. Please try again.'
+      end
+      puts
+    end
+
+    # Check if the row and column are within the valid range of the board.
+    #
+    # @param row [Integer] the row index.
+    # @param column [Integer] the column index.
+    # @return [Boolean] true if the coordinates are valid, false otherwise.
     def valid_coordinates?(row, column)
       row_count = @board.board.length / 3 - 1
       row_range = 0..row_count
@@ -126,3 +192,7 @@ module Game
     end
   end
 end
+
+# Run game in debug mode.
+game = Game::SetGame.new(Game::Board.new(Game::Deck.new), [Game::Player.new('Johnston'), Game::Player.new('Jonothy')], 'easy', 1)
+game.play_game

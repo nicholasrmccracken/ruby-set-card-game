@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
+require_relative 'constants'
 require_relative 'card'
 require_relative 'deck'
-module Game
-  START_SIZE = 12
 
+module Game
   # Represents the playing area where cards are dealt.
   #
   # @attr_reader board [Array<Card>] The cards on the board card.
