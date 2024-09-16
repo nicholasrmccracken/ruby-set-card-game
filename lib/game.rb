@@ -35,7 +35,7 @@ module Game
 
     # Play the game until the board is empty or a player wins.
     def play_game
-      until @board.board.empty?
+      until @board.cards.empty?
         @players.each do |player|
           play_round(player)
 
@@ -112,7 +112,7 @@ module Game
     # @return [Boolean] true if the player correctly identified a set, false otherwise.
     def process_set_identification(player)
       trio = parse_trio
-      if @board.board[trio[0]].set?(@board.board[trio[1]], @board.board[trio[2]])
+      if Game::Card.set?(@board.cards[trio[0]], @board.cards[trio[1]], @board.cards[trio[2]])
         process_valid_set(player, trio)
       else
         print "Not a valid set.\n\n"
@@ -128,7 +128,7 @@ module Game
       puts 'Set found!'
       player.increment_score
       @board.remove_cards(trio)
-      @board.add_cards unless @board.board.length >= START_SIZE
+      @board.add_cards unless @board.cards.length >= START_SIZE
     end
 
     # Process the player's request for a hint. The hint provided depends on the game difficulty.
@@ -184,7 +184,7 @@ module Game
     # @param column [Integer] the column index.
     # @return [Boolean] true if the coordinates are valid, false otherwise.
     def valid_coordinates?(row, column)
-      row_count = @board.board.length / 3 - 1
+      row_count = @board.cards.length / 3 - 1
       row_range = 0..row_count
       column_range = 0..2
 
@@ -194,5 +194,8 @@ module Game
 end
 
 # Run game in debug mode.
-game = Game::SetGame.new(Game::Board.new(Game::Deck.new), [Game::Player.new('Johnston'), Game::Player.new('Jonothy')], 'easy', 1)
+game = Game::SetGame.new(
+  Game::Board.new(Game::Deck.new(Game::Card)), 
+  [Game::Player.new('Johnston'), Game::Player.new('Jonothy')], 
+  'medium', 1)
 game.play_game
