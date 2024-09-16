@@ -37,6 +37,8 @@ module Game
     def deal_cards(num_cards = 1)
       cards = []
       num_cards.times do
+        break if @deck.empty?
+
         cards.push(@deck.pop)
       end
       cards
@@ -49,14 +51,6 @@ module Game
     # @return [Array<Card>] New updated array of cards.
     def replace_set(set, cards)
       set.each { |card| cards.delete(card) }
-      cards.concat(deal_cards(3))
-    end
-
-    # Add 3 new cards to those visible to player.
-    #
-    # @param cards [Array<Card>] The current cards visible to player.
-    # @return [Array<Card>] New updated array of cards.
-    def add_more_cards(cards)
       cards.concat(deal_cards(3))
     end
   end

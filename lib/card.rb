@@ -39,12 +39,12 @@ module Game
       "#{@card_properties[3]}\e[0m"
     end
 
+    private
+
     # Determines the ANSI color code based on the card's color property.
     # The color code is determined by the first property of the card, which represents the color.
     #
     # @return [String] The ANSI color code corresponding to the card's color.
-    private
-
     def color_code
       case @card_properties[0]
       when 'r'
