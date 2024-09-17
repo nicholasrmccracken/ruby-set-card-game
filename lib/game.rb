@@ -5,6 +5,7 @@ require_relative 'card'
 require_relative 'deck'
 require_relative 'board'
 require_relative 'player'
+require_relative 'cli'
 
 module Game
   # Represents a game playthrough of set.
@@ -198,4 +199,10 @@ game = Game::SetGame.new(
   Game::Board.new(Game::Deck.new(Game::Card)), 
   [Game::Player.new('Johnston'), Game::Player.new('Jonothy')], 
   'medium', 1)
-game.play_game
+
+#game.play_game
+cli = CLI.new
+
+cli.start
+
+

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+
 class CLI
   # start menu
   # first thing to run in the program
@@ -55,7 +56,7 @@ class CLI
 
     board = Game::Board.new(Game::Deck.new(Game::Card))
 
-    game = SetGame.new(board, players)
+    game = Game::SetGame.new(board, players)
     puts 'Starting game...'
     game.play_game
   end
