@@ -1,6 +1,14 @@
 # Set Project
 
 This is the CANS submission for the Set game project.
+------------------------------------------------------------------------------------------------------------------------------------------------
+Running program:
+
+Debug Mode - takes you straight to the game program and runs only it (no main menu)
+	command line = 'ruby game.rb'
+
+Full Game - begins by running menu UI allowing the user to choose a game mode, rules, or quitting the program
+	command line = 'ruby cli.rb'
 
 ------------------------------------------------------------------------------------------------------------------------------------------------
 Overview:
@@ -22,7 +30,7 @@ Shade:
 
 A set is acomplished by choosing a group of three cards each with all characteristics the same or different. In two player mode users go head to head against eachother to find a set first. Whoever finds the most sets of the two is declared the winner.
 
------------------------------------------------------------------------------------------------------------------------------------------------;
+------------------------------------------------------------------------------------------------------------------------------------------------
 
 Programmer comments:
 This game was programmed in ruby. It consists of 5 classes each with its own corresponding .rb file. The following is a cursory overview of each class, with its corresponding methods and functionality listed.
@@ -86,6 +94,12 @@ Aysha:
 - Final debugging help and comment documentation
 
 Christopher:
+
+- Implemented menu UI allowing user to navigate program
+- Wrote and structured README file 
+- Created the rules page and options for reading
+- Developed initial board and card format, writing initial skeleton for use of the board durring development
+- Wrote game messages for initial boot up and rules messages
 
 Nicholas:
 
