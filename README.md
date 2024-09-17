@@ -23,13 +23,13 @@ Programmer comments:
 This game was programmed in ruby. It consists of 5 classes each with its own corresponding .rb file. The following is a cursory overview of each class, with its corresponding methods and functionality listed.
 
 board: this class handles display of the 12 cards the user has to choose from to make a set. It requires the card and deck classes to operate.
-\tinitialize: creates the deck, shuffles it, then deals the cards
-\tadd_cards: adds new cards to the list of ones visible to the plater. adds them 3 at a time only.
-\tremove_cards: removes any trio of cards given
-\tfinal_set_count: counts the number of sets on the board 
-\tfind_single_set: finds a set on the board for when the user asks for a hint
-\tprint_board: prints the board to the screen along with the coordinate system
-\tprint_col_nums: prints the columns of the coordinate system
+    initialize: creates the deck, shuffles it, then deals the cards
+    add_cards: adds new cards to the list of ones visible to the plater. adds them 3 at a time only.
+    remove_cards: removes any trio of cards given
+    final_set_count: counts the number of sets on the board 
+    find_single_set: finds a set on the board for when the user asks for a hint
+    print_board: prints the board to the screen along with the coordinate system
+    print_col_nums: prints the columns of the coordinate system
 
 card: represents a single card in the game of set. Each card has a specific set of characterisitcs that must be compared against eachother regularly. By instantiating the functionality into a class, comparisons and siplay is made much easier throughout the program.
 	initialize: creates a new card with params, color, symbol, number, and shading
