@@ -194,7 +194,7 @@ module Game
 end
 
 # Run game in debug mode.
-if __FILE__ == $0
+if __FILE__ == $PROGRAM_NAME
   game = Game::SetGame.new(
     Game::Board.new(Game::Deck.new(Game::Card)),
     [Game::Player.new('Johnston'), Game::Player.new('Jonothy')],
