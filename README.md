@@ -95,3 +95,9 @@ Nicholas:
 - Implement additional features like selectable difficulty, hints, and multiplayer.
 
 Sanju:
+
+- Created preliminary module files (board, card, deck, game, player, rules)
+- Created preliminary board functionality - initialized deck, display, replace cards, compute number of sets
+- Loaded in appropriate files to be used in main (previous functionality, but has been moved)
+- Updated deck and rules modules, created initial functionality of each to be used in main
+- Called appropriate functions for testing
