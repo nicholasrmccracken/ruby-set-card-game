@@ -20,7 +20,7 @@ module Game
       @cards = deck.deal_cards(START_SIZE)
     end
 
-    # Adds new cards to those visible to the player.
+    # Appends the given number of cards to the current array of visible cards.
     #
     # @param num_cards [Integer] the number of cards to add (default is 3).
     # @return [Array<Card>] the updated array of cards.
@@ -39,7 +39,7 @@ module Game
 
     # Counts the number of sets on the board.
     #
-    # @return [Integer] the number of sets.
+    # @return [Integer] the valid number of sets on the board.
     def find_set_count
       count = 0
       @cards.combination(3).each do |card1, card2, card3|
@@ -50,16 +50,18 @@ module Game
 
     # Finds a single set on the board.
     #
-    # @return [String] the coordinates of the cards in the set.
+    # @return [String, nil] the coordinates of the cards in the set or nil if no set is found.
     def find_single_set
       @cards.each_with_index.to_a.combination(3).each do |(card1, idx1), (card2, idx2), (card3, idx3)|
         next unless Game::Card.set?(card1, card2, card3)
 
         return "(#{idx1.div(3)}, #{idx1 % 3}), (#{idx2.div(3)}, #{idx2 % 3}), (#{idx3.div(3)}, #{idx3 % 3})"
       end
+      nil
     end
 
     # Prints the board to the console.
+    # Cards are displayed in a grid format with rows and columns.
     def print_board
       print_col_nums
 

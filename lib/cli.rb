@@ -5,11 +5,12 @@ require_relative 'deck'
 require_relative 'board'
 require_relative 'player'
 require_relative 'game'
+
+# Handles user interaction for the game.
+# Provides menu, rules, and other options.
 class CLI
-  # start menu
-  # first thing to run in the program
-  # prints out welcome message to user and recieves input for which mode
-  # the user wishes to play
+  # Displays the start menu and handles the user's choice of game mode.
+  # User can choose to start a game, view the rules, or exit the program.
   def start
     # output the opening message
     intro = File.read('resources/intro.txt')
@@ -47,6 +48,8 @@ class CLI
     end
   end
 
+  # Starts a new game.
+  # Asks users for number of players, creates necessary game objects, and runs game loop.
   def play
     puts 'Enter # of players: '
     n_players = gets.to_i
@@ -65,7 +68,7 @@ class CLI
     game.play_game
   end
 
-  # Defines the rules of the game
+  # Displays the rules menu and provides explanations for how the game works.
   def rules
     exit = 0
     # exit loop when user is done reading rules
