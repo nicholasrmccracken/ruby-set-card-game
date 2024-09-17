@@ -65,11 +65,21 @@ player: represents the user of the game
 	increment_score: adds one to players current score
 ------------------------------------------------------------------------------------------------------------------------------------------------
 Individual contributions:
-Aysha -
+
+Aysha:
+    - Imeplement play function
+    - Keep track/score of sets found
+    - Replace found set with new cards
+    - Final debugging help and comment documentation
 
 Christopher -
 
-Nicholas -
+Nicholas:
+    - Made methods in Card, Deck, Board, and SetGame classes.
+    - Created Card attributes, methods and Deck attributes, methods.
+    - Added validation for user inputs in-game and inputs of class constructors.
+    - Implement additional features like selectable difficulty, hints, and multiplayer.
+
 
 Sanju -
 
