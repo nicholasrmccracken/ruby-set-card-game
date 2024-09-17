@@ -1,6 +1,6 @@
 # Set Project
 
-This is the CANS submssion for the Set game project.
+This is the CANS submission for the Set game project.
 
 ------------------------------------------------------------------------------------------------------------------------------------------------
 Overview:
