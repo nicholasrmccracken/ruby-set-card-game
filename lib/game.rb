@@ -5,7 +5,6 @@ require_relative 'card'
 require_relative 'deck'
 require_relative 'board'
 require_relative 'player'
-require_relative 'cli'
 
 module Game
   # Represents a game playthrough of set.
@@ -15,22 +14,23 @@ module Game
     # @param board [Board] the game board.
     # @param players [Array<Player>] the players in the game.
     # @param difficulty [String] the game difficulty. Must be 'easy', 'medium', or 'hard'. Defaults to 'medium'.
-    # @param winning_score [Integer] the score required to win the game. Must be <= 27 / number of players. Defaults to 5.
+    # @param winning_score [Integer] the score required to win the game. Must be <= MAX_SETS / number of players.
+    #   Defaults to 5.
     # @raise [ArgumentError] if difficulty is not valid or if winning_score exceeds the allowed max.
     def initialize(board, players, difficulty = 'medium', winning_score = 5)
       @board = board
       @players = players
 
-      valid_difficulties = %w[easy medium hard]
-      unless valid_difficulties.include?(difficulty)
+      unless %w[easy medium hard].include?(difficulty)
         raise ArgumentError, "Invalid difficulty '#{difficulty}'. Must be 'easy', 'medium', or 'hard'."
       end
+
       @difficulty = difficulty
 
-      max_score = 27 / players.size
-      unless (1..max_score).include?(winning_score)
-        raise ArgumentError, "Invalid winning score #{winning_score}. Must be between 1 and #{max_score}."
+      unless (1..(MAX_SETS / players.size)).include?(winning_score)
+        raise ArgumentError, "Invalid winning score #{winning_score}. Must be between 1 and #{MAX_SETS / players.size}."
       end
+
       @winning_score = winning_score
     end
 
@@ -38,11 +38,11 @@ module Game
     def play_game
       until @board.cards.empty?
         @players.each do |player|
-          play_round(player)
+          play_turn(player)
 
           if player.score >= @winning_score
             puts "#{player.name} has won with a score of #{player.score}!"
-            return
+            return true
           end
         end
       end
@@ -53,7 +53,7 @@ module Game
     # Play a round of the game.
     #
     # @param player [Player] the player whose turn it is.
-    def play_round(player)
+    def play_turn(player)
       loop do
         print_scoreboard
         @board.print_board
@@ -66,10 +66,10 @@ module Game
 
     # Print the scoreboard showing each player's score.
     def print_scoreboard
-      puts " ------ Scoreboard ------ "
+      puts ' ------ Scoreboard ------ '
       @players.each_with_index do |player, i|
         print "#{player.name}: #{player.score}"
-        print ", " if i < @players.length - 1
+        print ', ' if i < @players.length - 1
       end
       print "\n\n"
     end
@@ -93,18 +93,17 @@ module Game
     # @param player [Player] the current player.
     # @return [Boolean] true if a valid choice was made, false otherwise.
     def process_choice(choice, player)
-      case choice
-      when 'a'
-        @board.add_cards
-      when 'i'
-        process_set_identification(player)
-      when 'h'
-        process_hint
+      actions = { 'a' => -> { @board.add_cards },
+                  'i' => -> { process_set_identification(player) },
+                  'h' => -> { process_hint } }
+
+      if actions[choice]
+        actions[choice].call
+        true
       else
         print "Invalid move. Please try again.\n\n"
-        return false
+        false
       end
-      true
     end
 
     # Process the player's attempt to identify a set.
@@ -195,14 +194,11 @@ module Game
 end
 
 # Run game in debug mode.
-game = Game::SetGame.new(
-  Game::Board.new(Game::Deck.new(Game::Card)), 
-  [Game::Player.new('Johnston'), Game::Player.new('Jonothy')], 
-  'medium', 1)
-
-#game.play_game
-cli = CLI.new
-
-cli.start
-
-
+if __FILE__ == $0
+  game = Game::SetGame.new(
+    Game::Board.new(Game::Deck.new(Game::Card)),
+    [Game::Player.new('Johnston'), Game::Player.new('Jonothy')],
+    'easy', 1
+  )
+  game.play_game
+end

@@ -3,11 +3,11 @@
 module Game
   # Represents a card in the game of set.
   #
-  # @attr_reader card_properties [Array<String, Integer>] The properties of the card, 
+  # @attr_reader card_properties [Array<String, Integer>] The properties of the card,
   #   These include color, symbol, number, and shading.
   class Card
     attr_reader :card_properties
-  
+
     # Initializes a new Card.
     #
     # @param color [String] The color of the card. Could be 'r', 'g', or 'b'.
@@ -15,13 +15,11 @@ module Game
     # @param number [Integer] The number of symbols on the card. Could be 1, 2, or 3.
     # @param shading [String] The shading of the symbols on the card. Could be 's', 'p' or 'o'.
     def initialize(color, symbol, number, shading)
-      valid_color, valid_symbol, valid_number, valid_shading = %w[r g b], %w[o s d], [1, 2, 3], %w[s p o]
-
-      unless valid_color.include?(color) && 
-          valid_symbol.include?(symbol) &&
-          valid_number.include?(number) && 
-          valid_shading.include?(shading)
-        raise ArgumentError, "Invalid card properties."
+      unless %w[r g b].include?(color) &&
+             %w[o s d].include?(symbol) &&
+             [1, 2, 3].include?(number) &&
+             %w[s p o].include?(shading)
+        raise ArgumentError, 'Invalid card properties.'
       end
 
       @card_properties = [color, symbol, number, shading]
@@ -57,16 +55,11 @@ module Game
     #
     # @return [String] The ANSI color code corresponding to the card's color.
     def color_code
-      case @card_properties[0]
-      when 'r'
-        "\e[31m"
-      when 'g'
-        "\e[32m"
-      when 'b'
-        "\e[34m"
-      else
-        "\e[0m"
-      end
+      ansi_codes = { 'r' => "\e[31m",
+                     'g' => "\e[32m",
+                     'b' => "\e[34m" }
+
+      ansi_codes[card_properties[0]] || "\e[0m"
     end
   end
 end

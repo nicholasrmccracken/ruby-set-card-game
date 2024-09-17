@@ -10,8 +10,8 @@ module Game
     # Initializes a new Player.
     #
     # @param [String] name the name of the player.
-    def initialize(name) @name = name
-     
+    def initialize(name)
+      @name = name
       @score = 0
     end
 

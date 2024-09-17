@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
-
+require_relative 'card'
+require_relative 'deck'
+require_relative 'board'
+require_relative 'player'
+require_relative 'game'
 class CLI
   # start menu
   # first thing to run in the program
@@ -98,3 +102,7 @@ class CLI
     end
   end
 end
+
+# Run game.
+cli = CLI.new
+cli.start
