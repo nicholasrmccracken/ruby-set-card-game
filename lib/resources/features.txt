@@ -1,0 +1,6 @@
+features are displayed as follows
+
+[NumberColor-ShapeShade]
+
+Number: 1 2 or 3, Color: r g or b, 
+Shape: oval sqiggle diamond, Shade: none, partial, full
