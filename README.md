@@ -1,14 +1,15 @@
 # Set Project
 
 This is the CANS submission for the Set game project.
+
 ------------------------------------------------------------------------------------------------------------------------------------------------
 Running program:
 
 Debug Mode - takes you straight to the game program and runs only it (no main menu)
-	command line = 'ruby game.rb'
+command line = 'ruby game.rb'
 
 Full Game - begins by running menu UI allowing the user to choose a game mode, rules, or quitting the program
-	command line = 'ruby cli.rb'
+command line = 'ruby cli.rb'
 
 ------------------------------------------------------------------------------------------------------------------------------------------------
 Overview:
@@ -84,6 +85,50 @@ player: represents the user of the game
 - increment_score: adds one to players current score
 
 ------------------------------------------------------------------------------------------------------------------------------------------------
+Style guidelines:
+
+Code:
+Use Ruby LSP linter extension or gem install rubocop.
+Use markdown linter.
+Use YARD documentation (Copilot can easily generate).
+Use blocks and OOP principles if possible.
+
+Git Branches:
+Create a branch for features that are not completed within a single push.
+Prefix branch names with descriptors of work being done and use dashes as separators (i.e. ‘feature/deck-card-classes’, ‘bugfix/’).
+
+Git Commits:
+Commit messages must have subject line (50 char max) and optional body copy (wrapped at 72 columns) separated by a blank line. (instructions w/ how to add body copy)
+Subject lines should be capitalized and not end in a period.
+Subject lines should be written in an imperative mood (Add, not Added / Adds).
+Body copy must be wrapped at 72 columns.
+Body copy must only contain what and why explanations, never how. How should be in documentation.
+
+Example commit:
+
+Summarize changes in around 50 characters or less
+
+More detailed explanatory text, if necessary. Wrap it to about 72
+characters or so. In some contexts, the first line is treated as the
+subject of the commit and the rest of the text as the body. The
+blank line separating the summary from the body is critical (unless
+you omit the body entirely); various tools like `log`, `shortlog`
+and `rebase` can get confused if you run the two together.
+
+Explain the problem that this commit is solving. Focus on why you
+are making this change as opposed to how (the code explains that).
+Are there side effects or other unintuitive consequences of this
+change? Here's the place to explain them.
+
+Further paragraphs come after blank lines.
+
+- Bullet points are okay, too
+
+- Typically a hyphen or asterisk is used for the bullet, preceded
+   by a single space, with blank lines in between, but conventions
+   vary here
+
+------------------------------------------------------------------------------------------------------------------------------------------------
 Individual contributions:
 
 Aysha:
@@ -96,7 +141,7 @@ Aysha:
 Christopher:
 
 - Implemented menu UI allowing user to navigate program
-- Wrote and structured README file 
+- Wrote and structured README file
 - Created the rules page and options for reading
 - Developed initial board and card format, writing initial skeleton for use of the board durring development
 - Wrote game messages for initial boot up and rules messages
