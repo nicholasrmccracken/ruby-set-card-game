@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'constants'
+require_relative 'utils'
 require_relative 'card'
 require_relative 'deck'
 require_relative 'board'
@@ -27,8 +27,8 @@ module Game
 
       @difficulty = difficulty
 
-      unless (1..(MAX_SETS / players.size)).include?(winning_score)
-        raise ArgumentError, "Invalid winning score #{winning_score}. Must be between 1 and #{MAX_SETS / players.size}."
+      unless (1..(Game::MAX_SETS / players.size)).include?(winning_score)
+        raise ArgumentError, "Invalid winning score #{winning_score}. Must be <= #{Game::MAX_SETS / players.size}."
       end
 
       @winning_score = winning_score
@@ -97,13 +97,7 @@ module Game
                   'i' => -> { process_set_identification(player) },
                   'h' => -> { process_hint } }
 
-      if actions[choice]
-        actions[choice].call
-        true
-      else
-        print "Invalid move. Please try again.\n\n"
-        false
-      end
+      Game.perform_action(actions, choice)
     end
 
     # Process the player's attempt to identify a set.
@@ -128,7 +122,7 @@ module Game
       puts 'Set found!'
       player.increment_score
       @board.remove_cards(trio)
-      @board.add_cards unless @board.cards.length >= START_SIZE
+      @board.add_cards unless @board.cards.length >= Game::START_SIZE
     end
 
     # Process the player's request for a hint. The hint provided depends on the game difficulty.

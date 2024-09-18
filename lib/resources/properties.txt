@@ -1,0 +1,6 @@
+Cards will be displayed by their properties:
+
+color-symbol-number-shading
+
+Color may be r, g, or b. Symbol may be o, s, or d.
+Number may be 1, 2 or 3. Shading may be s, p or o.

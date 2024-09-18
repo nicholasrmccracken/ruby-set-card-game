@@ -1,0 +1,6 @@
+1: Read Rules
+2: How to Read Cards
+3: How to Form a Set
+4: Back to Main Menu
+
+What would you like to further explore:

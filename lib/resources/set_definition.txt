@@ -1,0 +1,5 @@
+A set is 3 cards whose properties are EITHER the same or DIFFERENT on each card.
+
+This means any feature in the set is either:
+  1. Common to all 3
+  2. Different in all 3

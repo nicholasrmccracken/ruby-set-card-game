@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'constants'
+require_relative 'utils'
 require_relative 'card'
 require_relative 'deck'
 
@@ -17,7 +17,7 @@ module Game
     def initialize(deck)
       @deck = deck
       @deck.shuffle!
-      @cards = deck.deal_cards(START_SIZE)
+      @cards = deck.deal_cards(Game::START_SIZE)
     end
 
     # Appends the given number of cards to the current array of visible cards.

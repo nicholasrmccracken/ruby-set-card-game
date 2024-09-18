@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require_relative 'utils'
 require_relative 'card'
 require_relative 'deck'
 require_relative 'board'
@@ -11,98 +12,119 @@ require_relative 'game'
 class CLI
   # Displays the start menu and handles the user's choice of game mode.
   # User can choose to start a game, view the rules, or exit the program.
-  def start
-    # output the opening message
-    intro = File.read('resources/intro.txt')
-    puts intro
+  def start_program
+    puts File.read('resources/intro.txt')
 
-    choice = 1
-    while choice != 0
-      # give and recieve game option
-      options = File.read('resources/options.txt')
-      puts options
+    actions = { 1 => -> { start_game },
+                2 => -> { rules },
+                3 => -> { exit_program } }
 
-      # cut input into integer
-      input = gets.chomp
-      choice = input.to_i
-
-      # game cases
-      case choice
-      # exit condition
-      when 0
-        puts "Its been fun seeing you !!\n"
-      # play mode
-      when 1
-        play
-      # rules mode
-      when 2
-        rules
-      # programmer notes
-      when 3
-        puts 'notes to come'
-      # invalid input condition
-      else
-        puts "error: #{choice} is a non valid input, try again"
-      end
-
+    loop do
+      puts File.read('resources/menu_options.txt')
+      choice = gets.chomp.to_i
+      Game.perform_action(actions, choice)
     end
   end
 
   # Starts a new game.
   # Asks users for number of players, creates necessary game objects, and runs game loop.
-  def play
-    puts 'Enter # of players: '
-    n_players = gets.to_i
-    if n_players < 1
-      puts 'At least one player required.'
-      return
-    end
+  def start_game
+    return if (difficulty = initialize_difficulty) == -1
+    return if (player_count = initialize_player_count) == -1
+    return if (winning_score = initialize_winning_score(player_count)) == -1
 
-    players = []
-    n_players.times { |i| players << Game::Player.new("Player #{i + 1}") }
+    puts
+
+    players = initialize_players(player_count)
 
     board = Game::Board.new(Game::Deck.new(Game::Card))
+    game = Game::SetGame.new(board, players, difficulty, winning_score)
 
-    game = Game::SetGame.new(board, players)
-    puts 'Starting game...'
     game.play_game
+  end
+
+  # Initializes the difficulty level for the game.
+  #
+  # @return [String, Integer] The difficulty level if valid, -1 otherwise.
+  def initialize_difficulty
+    print "\nEnter difficulty of easy, medium, or hard: "
+    difficulty = gets.chomp
+    unless %w[easy medium hard].include?(difficulty)
+      puts "#{difficulty} was an invalid difficulty."
+      return -1
+    end
+    difficulty
+  end
+
+  # Initializes the number of players for the game.
+  #
+  # @return [Integer] The number of players if valid, -1 otherwise.
+  def initialize_player_count
+    print "\nEnter # of players: "
+    player_count = gets.chomp.to_i
+    if player_count < 1
+      puts 'At least one player is required.'
+      return -1
+    end
+    player_count
+  end
+
+  # Initializes the winning score for the game.
+  #
+  # @param player_count [Integer] The number of players.
+  # @return [Integer] The winning score if valid, -1 otherwise.
+  def initialize_winning_score(player_count)
+    print "\nEnter winning score: "
+    winning_score = gets.chomp.to_i
+    unless (1..(Game::MAX_SETS / player_count)).include?(winning_score)
+      puts "Winning score must be at least 1 and less than #{Game::MAX_SETS / player_count}"
+      return -1
+    end
+    winning_score
+  end
+
+  # Initializes an array of Player objects.
+  #
+  # @param player_count [Integer] The number of players to initialize.
+  # @return [Array<Game::Player>] An array of Player objects.
+  def initialize_players(player_count)
+    players = []
+    player_count.times do |i|
+      print "Enter player #{i + 1}'s name: "
+      players << Game::Player.new(gets.chomp)
+      puts
+    end
+    players
   end
 
   # Displays the rules menu and provides explanations for how the game works.
   def rules
-    exit = 0
-    # exit loop when user is done reading rules
-    while exit != 1
-      # output and read options for rules explaination
-      puts '---------------------------------------------------------------------------'
-      puts "What would you like to further explore\n1: display\n2: how to read features\n3: how to make a set\n0: back to menu\n"
-      input = gets.chomp
-      option = input.to_i
+    actions = { 1 => -> { puts File.read('resources/rules.txt') },
+                2 => -> { puts File.read('resources/properties.txt') },
+                3 => -> { puts File.read('resources/set_definition.txt') },
+                4 => -> {} }
 
-      case option
-      # case for display
-      when 1
-        board = File.read('resources/board.txt') 
-        puts board
-      # cae for features
-      when 2
-        features = File.read('resources/features.txt')
-        puts features
-      # case for set
-      when 3
-        whatIsSet = File.read('resources/setexplain.txt')                         
-        puts whatIsSet
-      # exit condition
-      when 0
-        exit = 1
-      # invalid input condition
-      else
-        puts "Error, input of #{option} is not a choice\n"
-      end
+    loop do
+      print_rules_menu
+      choice = gets.chomp.to_i
+
+      Game.perform_action(actions, choice)
+      break if choice == 4
     end
+  end
+
+  # Prints the rules menu with each of the user selectable options.
+  def print_rules_menu
+    puts File.read('resources/rules_menu.txt')
+  end
+
+  # Exits the program with a goodbye message.
+  def exit_program
+    puts "It's been fun seeing you!"
+    exit
   end
 end
 
 # Run game.
 cli = CLI.new
-cli.start
+cli.start_program

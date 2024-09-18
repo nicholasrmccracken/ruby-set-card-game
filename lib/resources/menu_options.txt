@@ -1,0 +1,5 @@
+1. Play
+2. Rules
+3. Quit :(
+
+Where would you like to go: 

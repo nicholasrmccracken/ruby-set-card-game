@@ -1,10 +1,10 @@
-the format of the dispay is as follows:
+The format of the dispay is as follows:
 
-% 0 1 2 
+  0 1 2 
 0 _ _ _ 
 1 # _ _ 
 2 _ _ _ 
 3 _ _ _
 
-the users will adress each card as follows
-to index # user inputs location (0, 1)
+Players will address each card by row and column.
+For example, to address index #, the player inputs (0, 1).

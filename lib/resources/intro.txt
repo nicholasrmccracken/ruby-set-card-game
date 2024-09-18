@@ -1,7 +1,7 @@
 Welcome to CANS game of set! We are so happy you could join us!
 
-Set is a visual based card game, where the player must match a card 
-based on similarities or differences between the characteristics on the card. You can play this game by yourself or with a friend!
+Set is a visual based card game, where the player must match a card
+based on similarities or differences between the properties on the card. 
+You can play this game by yourself or with friends!
 
 You have several options to proceed with from here, enter the number of the option you wish to proceed with and have fun!
----------------------------------------------------------------------
